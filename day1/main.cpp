@@ -14,25 +14,19 @@ int main() {
     std::vector<std::string> inputs;
     std::string str;
     int count;
-    
-    // open file
-    // std::ifstream file_handler("input.txt");
-    // if (!file_handler.is_open()) {
-    //     std::cerr << "Failed to open file." << std::endl;
-    //     return 1;
-    // }
 
-    // // read next line from file until EOF
-    // while (std::getline(file_handler, str)) {
-    //     // push read line to vector
-    //     inputs.push_back(str);
-    // }
-
-    inputs = fileManager.readFileToVector("input.txt");
+    inputs = fileManager.readFileToVector("/home/anderson/workspace/Advent2023/day1/input.txt");
 
     for (const std::string& s : inputs) {
         std::cout << s << std::endl;
+        // for (int i=0; i<s.length(); i++) {
+        //     inputs.
+        // }
+
     }
+
+
+
 
     return 0;
 }

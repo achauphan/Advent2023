@@ -15,8 +15,10 @@ BUILD_DIR := $(PROJECT_DIR)/builds/$(TARGET)
 SRC_EXT := cpp
 # list of paths to source files
 SRC_FILES := $(shell find $(SRC_DIR) -type f -name *.$(SRC_EXT))
+UTIL_SRC_FILES := $(shell find $(UTIL_DIR) -type f -name *.$(SRC_EXT))
 # list of file names without full path
 SRC_FILE_NAMES := $(notdir $(SRC_FILES))
+SRC_FILE_NAMES += $(notdir $(UTIL_SRC_FILES))
 # created list of object file paths
 OBJ_FILES := $(patsubst %.cpp, $(BUILD_DIR)/%.o, $(SRC_FILE_NAMES))
 
@@ -29,15 +31,23 @@ all: $(BUILD_DIR)
 	@echo "UTIL_DIR=$(UTIL_DIR)"
 	@echo "Building all $(TARGET) into $(BUILD_DIR)"
 
-# link objects
-$(BUILD_DIR) : $(OBJ_FILES)
-	@echo "Linking object files..."
-	$(CXX) $(CXX_FLAGS) $^ -o $(BUILD_DIR)/$(TARGET)
-	
+# compile object files	
 $(BUILD_DIR)/%.o : $(SRC_DIR)/%.$(SRC_EXT)
+	@echo "Assembling source directory: $<"
 	mkdir -p $(BUILD_DIR)
 	$(CXX) $(CXX_FLAGS) -c -o $@ $<
-	
+
+$(BUILD_DIR)/%.o : $(UTIL_DIR)/%.$(SRC_EXT)
+	@echo "Assembling utilities directory: $<"
+	mkdir -p $(BUILD_DIR)
+	$(CXX) $(CXX_FLAGS) -c -o $@ $<
+
+# link objects and create an executable
+$(BUILD_DIR) : $(OBJ_FILES)
+	@echo "Linking object files..."
+	@echo "SRC_FILE_NAMES=$(SRC_FILE_NAMES)"
+	$(CXX) $(CXX_FLAGS) $^ -o $(BUILD_DIR)/$(TARGET)
+
 
 # clean objects in build dir
 
